@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pretext>
+  <docinfo>
+    <rename element="theorem">Théorème</rename> <rename element="definition">Définition</rename> <rename element="example">Exemple</rename> <rename element="corollary">Corollaire</rename> <rename element="remark">Remarque</rename> <rename element="hint">Indice</rename> <rename element="objectives">Objectifs</rename> <rename element="outcomes">Vocabulaire</rename> <rename element="inlineexercise">Petit Exercice</rename> <rename element="exercise">Exercice</rename> <rename element="project">Exercice</rename> <rename element="exercises">Exercice</rename> <rename element="solution">Spoiler</rename> <rename element="proof">Preuve</rename> <rename element="appendix">Annexe</rename>
+    <latex-preamble>
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{mdframed}
+\usepackage{cuted}
+\usepackage{systeme}
+\usepackage{ mathdots }
+\usepackage{bbm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{bold-extra}
+\usepackage{ textcomp }
+\usepackage{caption}
+\usepackage{fontawesome}
+    </latex-preamble>
+
+    <macros>
+      \newcommand{\K}{\mathbb{K}}
+      \newcommand{\Z}{\mathbb{Z}}
+      \renewcommand{\L}{\mathcal L}
+      \newcommand{\B}{\mathscr B}
+      \newcommand{\M}{\mathcal M}
+      \newcommand{\Q}{\mathbb{Q}}
+      \newcommand{\N}{\mathbb{N}}
+      \newcommand{\R}{\mathbb{R}}
+      \newcommand{\C}{\mathbb{C}}
+      \newcommand{\lbb}{\,]\,}
+      \newcommand{\rbb}{\,[\,}
+      \DeclareMathOperator{\Tr}{Tr}
+      \DeclareMathOperator{\rg}{rg}
+      \DeclareMathOperator{\Ker}{Ker}
+      \DeclareMathOperator{\Id}{Id}
+      \DeclareMathOperator{\Image}{Im}
+      \DeclareMathOperator{\Card}{Card}
+      \DeclareMathOperator{\Vect}{Vect}
+    </macros>
+  </docinfo>
+
+  <article xml:id="al1-recap_chap7_det">
+    <title>Déterminant</title>
+
+    <introduction>
+
+
+
+<p></p>
+
+<image source="determinantSekiTakakazu.jpg"/>
+<p></p>
+
+      <p>
+        Le déterminant d'une matrice carrée <m>A\in\M_n(\R)</m> est un nombre (réel ou complexe) qu'on peut calculer à 
+        partir de ses coefficients, et qui permet de</p>
+        <ul>
+          <li>savoir si <m>>A</m>> est inversible</li>
+          <li>calculer l'inverse de <m>>A</m></li>
+          <li>résoudre les systèmes linéaires dont les coefficients sont donnés par <m>>A</m></li>
+        </ul>
+          <p>Mais le déterminant  peut être long à calculer si on ne s'y prend pas bien.</p>
+
+
+
+        <objectives  xml:id="objectives-system">
+          <title>Vous savez maintenant:</title>
+          <ol marker="1">
+              <li><p>Calculer de tête (ou presque) le déterminant d'une matrice <m>2\times 2</m>.</p></li>
+              <li><p>Calculer de tête  le déterminant d'une matrice diagonale ou triangulaire.</p></li>
+              <li><p>Utiliser la formule de Sarrus pour calculer le déterminant d'une matrice <m>3\times 3</m></p></li>
+              <li><p>Utiliser les opérations d'échelonnage sur les lignes et colonnes pour simplifier un déterminant 
+                en faisant apparaître des zéros sur une ligne ou colonne</p></li>
+              <li><p>Calculer le déterminant d'une matrice dépendant d'un paramètre <m>m</m>, en fonction de la valeur de <m>m</m>.</p></li>
+              <li><p>Déterminer à l'aide du déterminant si une matrice est inversible</p></li>
+              <li><p>Utiliser la transposée de la comatrice pour calculer l'inverse de <m>A</m>.</p></li>
+            </ol>
+        </objectives>
+
+        <p></p>
+
+
+
+        <p></p>
+
+<p>Et les mots suivants devraient vous être familiers:</p>
+
+<p></p>
+
+        <outcomes>
+          <title>Vocabulaire</title>
+           <ul>
+            <li>Déterminant</li>
+            <li>Règle de Sarrus</li>
+            <li>Cofacteur et comatrice</li>
+          </ul>
+        </outcomes>
+
+        <p></p>
+
+       <p>Et si ce n'est pas le cas, vous trouverez <url href="http://carolinevernier.website/memos/determinants_fiche.pdf">ici</url> une fiche résumé pour ce chapitre.</p> 
+  
+
+      <p></p>
+
+
+    </introduction>
+
+    
+<section>
+  <title>Testez vos réflexes</title>
+
+  <exercises>
+    <title>Vrai ou faux ?</title>
+
+     <exercise exercise-interactive="truefalse">
+    <statement correct="yes"><p>Le déterminant d'un produit de matrices <m>AB</m> est égal à <m>\det(A)\det(B)</m>.</p>
+  </statement>
+  <feedback><p>C'est une propriété classique (mais difficile à montrer !) du déterminant. </p></feedback>
+</exercise>
+
+ <exercise exercise-interactive="truefalse">
+    <statement correct="no"><p>La déterminant d'une somme de matrices <m>A+B</m> est égal à  <m>\det(A)+\det(B)</m>.</p>
+  </statement>
+  <feedback><p>Malheureusement, ce n'est pas si simple ! Par exemple,</p>
+  <md>
+    <mrow>A=\begin{pmatrix} 1 \amp 0\\0 \amp 1\end{pmatrix}, \quad B= \begin{pmatrix} -1 \amp 0\\0 \amp -1\end{pmatrix} \text{ et } A+B = \begin{pmatrix} 0 \amp 0\\0 \amp 0 \end{pmatrix} </mrow>
+    <mrow> \det(A)=1,\ \det(B)=1,\text{ et } \det(A+B) = 0</mrow>
+   </md>
+  </feedback>
+</exercise>
+
+ <exercise exercise-interactive="truefalse">
+    <statement correct="no"><p>Si on échange deux lignes, le déterminant de change pas.</p>
+  </statement>
+  <feedback>
+    <p>Pas tout à fait : dans ce cas, le déterminant change de signe. Par exemple:</p>
+     <me>\begin{vmatrix} 1 \amp  1 \\ 1 \amp 2 \end{vmatrix} = 1,\quad \begin{vmatrix} 1 \amp  2 \\ 1 \amp 1 \end{vmatrix} = -1</me>
+  </feedback>
+</exercise>
+
+
+
+
+   <exercise exercise-interactive="truefalse">
+    <statement correct="no"><p>Soit <m>m</m> un réel. On considère une matrice <m>A</m> de taille <m>50\times 50</m> dont la première colonne est 
+       <m>C_1 = \begin{pmatrix} 1\\1\\\vdots\\1\end{pmatrix}</m> et la dernière colonne est  <m>C_{50} = \begin{pmatrix} m\\m\\\vdots\\m\end{pmatrix}</m> 
+    </p>
+  <p>Il existe des valeurs de <m>m</m> pour lesquelles <m>A</m> est inversible.</p> </statement>
+    <feedback>
+     <p>Non, quel que soit <m>m</m>, et quelles que soient les 48 autres colonnes de <m>A</m>, <m>A</m> ne peut pas être inversible, car elle a deux colonnes proportionnelles. </p>
+      <p>On peut le mettre en évidence: avec l'opération <m>C_{50} \leftarrow C_{50} - m C_1</m>, on trouve</p>
+      <me>\det(A) = \begin{vmatrix}1 \amp \star \amp  \dots  \amp  \star  \amp  0 \\1 \amp \star \amp  \dots  \amp  \star  \amp  0 \\ \vdots  \amp   \amp  \vdots \\1 \amp \star \amp  \dots  \amp  \star  \amp  0 \end{vmatrix}</me>
+      <p>Et il ne reste plus qu'à développer par rapport à la dernière colonne pour obtenir <m>\det(A)= 0</m>, donc <m>A</m> ne peut pas 
+        être inversible.</p>
+      </feedback>
+    </exercise>
+
+  <exercise exercise-interactive="truefalse">
+    <statement correct="no">
+      <p>Le déterminant de la matrice <m>D=\begin{pmatrix}0 \amp 0 \amp \dots  \amp  0 \amp 1 \\0 \amp 0 \amp \dots  \amp 1 \amp 0 \\  \amp   \amp   \amp  \\ 0 \amp 1 \amp \dots  \amp 0 \amp 0 \\ 1 \amp 0 \amp  \dots  \amp  0 \amp 0\end{pmatrix}</m>
+      est égal à <m>1</m>, car c'est le produit de ses coefficients diagonaux.</p>
+     </statement>
+        <feedback>
+          <p>Pas forcément, car <m>D</m> n'est pas ce qu'on appelle une matrice diagonale: ce n'est pas la bonne diagonale !</p>
+          <p>En fait, ça dépend de la taille de la matrice. On peut calculer:</p>
+          <md>
+            <mrow>\begin{vmatrix} 0 \amp 1\\1 \amp 0\end{vmatrix} = -1, \quad \begin{vmatrix} 0 \amp 0 \amp 1\\0 \amp 1 \amp 0\\1 \amp 0 \amp 0\end{vmatrix} = -1</mrow>
+              <mrow>\begin{vmatrix} 0 \amp 0 \amp 0 \amp 1\\0 \amp 0 \amp 1 \amp 0\\0 \amp 1 \amp 0 \amp 0\\1 \amp 0 \amp 0 \amp 0\end{vmatrix}= 1, \quad  \begin{vmatrix} 0 \amp 0 \amp 0 \amp 0 \amp 1\\0 \amp 0 \amp 0 \amp 1 \amp 0\\0 \amp 0 \amp 1 \amp 0 \amp 0\\0 \amp 1 \amp 0 \amp 0 \amp 0\\1 \amp 0 \amp 0 \amp 0 \amp 0\end{vmatrix}= 1
+              </mrow></md>
+          <p><em>Challenge</em>: Trouver une formule pour le déterminant de cette matrice en fonction de sa taille !</p>
+          </feedback>
+      </exercise>
+</exercises>
+ </section>
+
+
+          <section>
+            <title>Entraînez-vous </title>
+
+            <p></p>
+
+            <exercises>
+            <title>Sans calcul !</title>
+
+            <introduction>
+              <p>
+                Trouver les déterminants des matrices suivantes:
+              </p>
+            </introduction>
+
+            <exercise exercise-customization="divisional" exercise-interactive="fillin-basic">
+              <statement>
+                <me>
+                  A= \begin{pmatrix} 0\amp 1\amp 6\\0\amp 2\amp 5\\0\amp 3\amp 4 \end{pmatrix}
+                </me>
+
+                <p>
+                  <m>\det(A)=</m> <var />
+                </p>
+              </statement>
+              <setup> <var> <condition string="0">
+              <feedback>
+                <p>
+                  C'est ça!
+                </p>
+
+                
+                <p>
+                  La première colonne de <m>A</m> est nulle, donc son déterminant est nul.</p>
+
+                <p>
+                  Plus généralement, par multi-linéarité, si <m>M\in\mathcal M_n(\R)</m> a une ligne ou une colonne nulle, alors <m>\det(M)=0</m>.
+                </p>
+              </feedback>
+              </condition> <condition string="3">
+
+              <feedback>
+                <p>
+                  La première colonne de <m>A</m> est nulle, donc son déterminant est nul.</p>
+
+                <p>
+                  Plus généralement, par multi-linéarité, si <m>M\in\mathcal M_n(\R)</m> a une ligne ou une colonne nulle, alors <m>\det(M)=0</m>.
+                </p>
+              </feedback>
+              </condition> </var> </setup>
+            </exercise>
+
+            <exercise exercise-customization="divisional" exercise-interactive="fillin-basic">
+              <statement>
+                <me>
+                  B=  \begin{pmatrix} 1\amp 1\amp 1\\2\amp 2\amp 2\\0\amp 3\amp 4 \end{pmatrix}
+                </me>
+
+                <p>
+                  <m>\det(B)=</m> <var />
+                </p>
+              </statement>
+              <setup> <var> <condition string="0">
+              <feedback>
+                <p>
+                  C'est ça !
+                </p>
+
+                <p>
+                  Les deux premières lignes de <m>B</m> sont proportionnelles, donc
+                </p>
+                <me>
+                  \det(B)=0.
+                </me>
+              </feedback>
+              </condition> <condition string="egzqrt">
+
+              <feedback>
+                <p>
+                  Les deux premières lignes de <m>B</m> sont proportionnelles, donc 
+                </p>
+                <me>
+                  \det(B)=0.
+                </me>
+              </feedback>
+              </condition> </var> </setup>
+            </exercise>
+
+            <exercise exercise-customization="divisional" exercise-interactive="fillin-basic">
+              <statement>
+                <me>
+                  C=  \begin{pmatrix} 2\amp 0\amp 0\amp 0\amp 0\\ 1\amp -1\amp 0\amp 0\amp 0\\ 3\amp 24\amp 1\amp 0\amp 0\\ 2\amp 218\amp 3\amp 2\amp 0\\ 11\amp 1\amp 11\amp 1\amp 1 \end{pmatrix}
+                </me>
+
+                <p>
+                  <m>\det(C)=</m> <var />
+                </p>
+              </statement>
+              <setup> <var> <condition string="-4">
+              <feedback>
+                <p>
+                  C'est ça!
+                </p>
+
+                <p>
+                  <m>C</m> est une matrice triangulaire, donc son déterminant est le produit des coefficients diagonaux:
+                </p>
+                <me>
+                  \det(C)=2\cdot -1 \cdot 1 \cdot 2 \cdot 1 = -1
+                </me>
+              </feedback>
+              </condition> <condition string="sryser">
+
+              <feedback>
+                <p>
+                  <m>C</m> est une matrice triangulaire, donc son déterminant est le produit des coefficients diagonaux:
+                </p>
+                <me>
+                  \det(C)=2\cdot -1 \cdot 1 \cdot 2 \cdot 1 = -1
+                </me>
+              </feedback>
+              </condition> </var> </setup>
+            </exercise>
+
+            </exercises>
+            
+            
+              <exercises>
+            <title>Toujours sans calcul !</title>
+
+            <introduction>
+              <p>
+                Supposons qu'on a une matrice <m>M=\begin{pmatrix}a\amp b\amp c\\d\amp e\amp f\\g\amp h\amp i\end{pmatrix}</m> de déterminant 3.
+                Trouver les déterminants des matrices suivantes:
+              </p>
+            </introduction>
+
+            <exercise exercise-customization="divisional" exercise-interactive="fillin-basic">
+              <statement>
+                <me>
+                  M_1=\begin{pmatrix}2a\amp 2b\amp 2c\\d\amp e\amp f\\g\amp h\amp i\end{pmatrix}
+                </me>
+
+                <p>
+                  <m>\det(M_1)=</m> <var />
+                </p>
+              </statement>
+              <setup> <var> <condition string="6">
+              <feedback>
+                <p>
+                  C'est ça!
+                </p>
+
+                <p>
+                  On  obtient <m>M_1</m> à partir de <m>M</m> par l'opération <m>\boxed{L_1 \leftarrow 2L_1}</m>, donc <m>\det(M_1) = 2 \det(M)=6</m>.
+                 </p>
+              </feedback>
+              </condition> <condition string="3">
+
+               <feedback>
+                <p>
+                  On  obtient <m>M_1</m> à partir de <m>M</m> par l'opération <m>\boxed{L_1 \leftarrow 2L_1}</m>, donc <m>\det(M_1) = 2 \det(M)=6</m>.
+                 </p>
+              </feedback>
+              </condition> </var> </setup>
+            </exercise>
+
+             <exercise exercise-customization="divisional" exercise-interactive="fillin-basic">
+              <statement>
+                <me>
+                  M_2=\begin{pmatrix}d\amp e\amp f\\a\amp b\amp c\\g\amp h\amp i\end{pmatrix}
+                </me>
+
+                <p>
+                  <m>\det(M_2)=</m> <var />
+                </p>
+              </statement>
+              <setup> <var> <condition string="-3">
+              <feedback>
+                <p>
+                  C'est ça!
+                </p>
+
+                <p>
+                  On  obtient <m>M_2</m> à partir de <m>M</m> par l'opération <m>\boxed{L_1 \leftrightarrow L_2}</m>, ce qui change le signe du déterminant. Donc <m>\det(M_2) = - \det(M)=-3</m>.
+                 </p>
+              </feedback>
+              </condition> <condition string="3">
+
+               <feedback>
+                <p>
+                  On  obtient <m>M_2</m> à partir de <m>M</m> par l'opération <m>\boxed{L_1 \leftrightarrow L_2}</m>, ce qui change le signe du déterminant. Donc <m>\det(M_2) = - \det(M)=-3</m>.
+                 </p>
+              </feedback>
+              </condition> </var> </setup>
+            </exercise>
+
+             <exercise exercise-customization="divisional" exercise-interactive="fillin-basic">
+              <statement>
+                <me>
+                  M_3=\begin{pmatrix}2c\amp b\amp a\\2f\amp e\amp d\\2i\amp h\amp g\end{pmatrix}
+                </me>
+
+                <p>
+                  <m>\det(M_3)=</m> <var />
+                </p>
+              </statement>
+              <setup> <var> <condition string="-6">
+              <feedback>
+                <p>
+                  C'est ça!
+                </p>
+
+                <p>
+                  On  obtient <m>M_3</m> à partir de <m>M</m> par les opérations <m>\boxed{C_1 \leftrightarrow C_3}</m>, 
+                  ce qui change le signe du déterminant, puis <m>\boxed{C_1 \leftarrow 2C_1}</m>, ce qui multiplie le déterminant par 2.</p>
+                  <p> Donc <m>\det(M_3) = -2 \det(M)=-6</m>.
+                 </p>
+              </feedback>
+              </condition> <condition string="3">
+
+               <feedback>
+                <p>
+                  On  obtient <m>M_3</m> à partir de <m>M</m> par les opérations <m>\boxed{C_1 \leftrightarrow C_3}</m>, 
+                  ce qui change le signe du déterminant, puis <m>\boxed{C_1 \leftarrow 2C_1}</m>, ce qui le multiplie par 2.</p>
+                  <p> Donc <m>\det(M_3) = -2 \det(M)=-6</m>.
+                 </p>
+              </feedback>
+              </condition> </var> </setup>
+            </exercise>
+
+
+            <exercise exercise-customization="divisional" exercise-interactive="fillin-basic">
+              <statement>
+                <me>
+                  M_4=\begin{pmatrix}a\amp b\amp c\\2d-3g\amp 2e-3h\amp 2f-3i\\g\amp h\amp i\end{pmatrix}
+                </me>
+
+                <p>
+                  <m>\det(M_4)=</m> <var />
+                </p>
+              </statement>
+              <setup> <var> <condition string="6">
+              <feedback>
+                <p>
+                  C'est ça!
+                </p>
+
+                <p>
+                  On  obtient <m>M_4</m> à partir de <m>M</m> par les opérations <m>\boxed{L_2 \leftarrow 2 L_2}</m>, 
+                  ce qui change multiplie le déterminant par 2, puis <m>\boxed{L_2 \leftarrow L_2-3L_3}</m>, ce qui ne change pas le déterminant.</p>
+                  <p> Donc <m>\det(M_4) = 2 \det(M)=6</m>.
+                 </p>
+              </feedback>
+              </condition> <condition string="3">
+
+                <feedback>
+                <p>
+                  On  obtient <m>M_4</m> à partir de <m>M</m> par les opérations <m>\boxed{L_2 \leftarrow 2 L_2}</m>, 
+                  ce qui change multiplie le déterminant par 2, puis <m>\boxed{L_2 \leftarrow L_2-3L_3}</m>, ce qui ne change pas le déterminant.</p>
+                  <p> Donc <m>\det(M_4) = 2 \det(M)=6</m>.
+                 </p>
+              </feedback>
+              </condition> </var> </setup>
+            </exercise>
+
+          </exercises>
+            
+            <exercises>
+            <title>Avec calcul !</title>
+
+            <introduction>
+              <p>
+                Calculer les déterminants des matrices suivantes:
+              </p>
+            </introduction>
+
+            <exercise exercise-customization="divisional" exercise-interactive="fillin-basic">
+              <statement>
+                <me>
+                  A= \begin{pmatrix} 3\amp 5\amp -5\\2\amp -5\amp 4\\1\amp 2\amp 1 \end{pmatrix}
+                </me>
+
+                <p>
+                  <m>\det(A)=</m> <var />
+                </p>
+              </statement>
+              <setup> <var> <condition string="-74">
+              <feedback>
+                <p>
+                  C'est ça !
+                </p>
+
+                <p>
+                <image source="det_exo_a.png"/>
+                </p>
+              </feedback>
+              </condition> <condition string="qzet">
+
+              <feedback>
+                <p>
+                   <image source="det_exo_a.png"/>
+                </p>
+              </feedback>
+              </condition> </var> </setup>
+            </exercise>
+
+            <exercise exercise-customization="divisional" exercise-interactive="fillin-basic">
+              <statement>
+                <me>
+                  B=  \begin{pmatrix} 1\amp -2\amp 0\amp -3\\ -1\amp 3\amp 1\amp 8\\ 2\amp -4\amp -1\amp -9\\ 3\amp -3\amp 0\amp -3 \end{pmatrix}
+                </me>
+
+                <p>
+                  <m>\det(B)=</m> <var />
+                </p>
+              </statement>
+              <setup> <var> <condition string="0">
+              <feedback>
+                <p>
+                  C'est ça!
+                </p>
+
+                <p>
+                  <image source="det_exo_b.png"/>
+
+                </p>
+              </feedback>
+              </condition> <condition string="2">
+
+              <feedback>
+                <p>
+                   <image source="det_exo_b.png"/>
+
+                </p>
+              </feedback>
+              </condition> </var> </setup>
+            </exercise>
+
+            <exercise exercise-customization="divisional" exercise-interactive="fillin-basic">
+              <statement>
+                <me>
+                  C= \begin{pmatrix} a-2\amp 2\amp -1 \\2\amp 1\amp 2\\2a\amp a+2\amp 2a+1 \end{pmatrix}
+                </me>
+
+                <p>
+                  <m>\det(C)=</m> <var />
+                </p>
+              </statement>
+              <setup> <var> <condition string="-3a-2">
+              <feedback>
+                <p>
+                  C'est ça!
+                </p>
+
+                <p>
+                                 <image source="det_exo_c.png"/>
+
+                </p>
+              </feedback>
+              </condition> <condition string="-2-3a">
+
+              <feedback>
+                <p>
+                  C'est ça!
+                </p>
+
+                <p>
+                                 <image source="det_exo_c.png"/>
+
+                </p>
+              </feedback>
+              </condition> <condition string="rstzr">
+
+              <feedback>
+                <p>
+                                 <image source="det_exo_c.png"/>
+
+                </p>
+              </feedback>
+              </condition> </var> </setup>
+            </exercise>
+
+            </exercises>
+
+            
+
+<!-- 
+            <project>
+              <title>Une base de diagonalisation</title>
+
+              <introduction>
+                <p>
+                  On note <m>f \in \mathcal L (\R^3)</m> l'endomorphisme de <m>\R^3</m> dont la matrice dans la base canonique est
+                </p>
+                <me>
+                  \begin{pmatrix} 1\amp 1\amp 0\\2\amp 1 \amp 2 \\ 0\amp 1\amp 1 \end{pmatrix}
+                </me>
+              </introduction>
+
+
+              <task>
+                <statement>
+                  <p>
+                    Calculer, pour <m>\lambda \in \R</m>,
+                  </p>
+                  <me>
+                    \det \begin{pmatrix} 1-\lambda\amp 1\amp 0\\2\amp 1-\lambda \amp 2 \\ 0\amp 1\amp 1- \lambda \end{pmatrix}
+                  </me>
+                </statement>
+
+                <solution>
+                  <p>
+                    <video youtube="hjmemxeLDIM"/>
+                  </p>
+                </solution>
+              </task>
+
+
+              <task>
+                <statement>
+                  <p>
+                    En déduire qu'il existe
+                  </p>
+
+                  <ul>
+                    <li>
+                      <p>
+                        Un vecteur <m>v_1 \in \R^3\setminus \{0_{\R^3}\}</m> tel que <m>Av_1=v_1</m>;
+                      </p>
+                    </li>
+
+                    <li>
+                      <p>
+                        Un vecteur <m>v_{-1} \in \R^3\setminus \{0_{\R^3}\}</m> tel que <m>Av_{-1}=-v_{-1}</m>;
+                      </p>
+                    </li>
+
+                    <li>
+                      <p>
+                        Un vecteur <m>v_1 \in \R^3\setminus \{0_{\R^3}\}</m> tel que <m>Av_3=3v_3</m>;
+                      </p>
+                    </li>
+                  </ul>
+
+                  <p>
+                    Ensuite, trouver de tels vecteurs.
+                  </p>
+                </statement>
+
+                <hint>
+                  <p>
+                    Que donne le calcul précédent pour <m>\lambda = 1</m> ? Que peut-on en déduire sur le système
+                  </p>
+                  <me>
+                    (A-I_3)\begin{pmatrix}x\\y\\z\end{pmatrix}=\begin{pmatrix}0\\0\\0\end{pmatrix} ?
+                  </me>
+
+                  <p>
+                    Et si ce système admet une solution non nulle, disons au hasard <m>v_1</m>, que vaut <m>Av_1</m> ?
+                  </p>
+                </hint>
+
+                <solution>
+                  <p>
+                    <video youtube="SRCGhPwmlA4"/>
+                  </p>
+                </solution>
+              </task>
+
+
+              <task>
+                <statement>
+                  <p>
+                    Montrer que <m>\{v_1,v_{-1},v_3\}</m> est une base de <m>\R^3</m> et donner la matrice de <m>f</m> dans cette base.
+                  </p>
+
+                  <p>
+                    Emettre un avis esthétique.
+                  </p>
+                </statement>
+
+                <solution>
+                  <p>
+                    <video youtube="ga7sj3mT_Mo"/> <video youtube="ln-szMGiVWM"/>
+                  </p>
+                </solution>
+              </task>
+            </project> -->
+          </section>
+        </article>
+      </pretext>
