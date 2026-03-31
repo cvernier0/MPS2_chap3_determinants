@@ -63,9 +63,9 @@
         Le déterminant d'une matrice carrée <m>A\in\M_n(\R)</m> est un nombre (réel ou complexe) qu'on peut calculer à 
         partir de ses coefficients, et qui permet de</p>
         <ul>
-          <li>savoir si <m>>A</m>> est inversible</li>
-          <li>calculer l'inverse de <m>>A</m></li>
-          <li>résoudre les systèmes linéaires dont les coefficients sont donnés par <m>>A</m></li>
+          <li>savoir si <m>A</m> est inversible</li>
+          <li>calculer l'inverse de <m>A</m></li>
+          <li>résoudre les systèmes linéaires dont les coefficients sont donnés par <m>A</m></li>
         </ul>
           <p>Mais le déterminant  peut être long à calculer si on ne s'y prend pas bien.</p>
 
